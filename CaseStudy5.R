@@ -45,15 +45,17 @@ joined_state_search <- joined_state_search %>%
          dist_km = as.numeric((dist_m)/1000),
          Intersect = ifelse(dist_km == 0, dist_km, NA_real_))
 
-eclipse_search_map <- ggplot() + geom_sf(data = world) + geom_sf(data = joined_state_search, aes(fill = Searches)) + geom_sf(data = upath_lo, fill = NA, color = "red") + scale_fill_distiller(palette = "Blues", direction = 1)
+world1 <- world %>%
+  filter(continent == "North America")
+
+eclipse_search_map <- ggplot() + geom_sf(data = world1) + geom_sf(data = joined_state_search, aes(fill = Searches)) + geom_sf(data = upath_lo, fill = NA, aes(color = "red")) + scale_fill_distiller(palette = "Blues", direction = 1) + labs(title = "Intersection of Solar Eclipse Path and Search Popularity", x = "Longitude", y = "Latitude", colour = "Eclipse Path Outline") + theme(legend.position = "bottom") + scale_color_manual(labels = NULL, values = "red")
   
 eclipse_search_map + coord_sf()
 
 eclipse_day <- eyes_hurt_timeline %>%
   filter(Date == "4/8/2024")
 
-search_over_time_plot <- ggplot() + geom_line(data = eyes_hurt_timeline, aes(x = Date, y = Searches, group = 1), color = "darkblue") + geom_point(data = eclipse_day, aes(x = Date, y = Searches), color = "red") + theme(axis.text.x = element_text(angle = 90), panel.background = element_blank(), panel.grid = element_line(color = "lightblue")) 
-
+search_over_time_plot <- ggplot() + geom_line(data = eyes_hurt_timeline, aes(x = Date, y = Searches, group = 1), color = "darkblue") + geom_point(data = eclipse_day, aes(x = Date, y = Searches, color = "red")) + theme(axis.text.x = element_text(angle = 90), panel.background = element_blank(), panel.grid = element_line(color = "lightblue"), legend.position = "bottom", panel.border = element_rect(color = "black")) + labs(title = "Search For 'Eyes Hurt' Over Time", x = "Date", y = "Search Frequency", colour = "Solar Eclipse Day (4/8/24)") + scale_color_manual(labels = "100 Searches", values = "red")
 search_over_time_plot                                
 
 ggarrange(eclipse_search_map, search_over_time_plot)
