@@ -11,6 +11,7 @@ library(dplyr)
 library(spData)
 library(ggpubr)
 setwd("C:/Users/aublm/OneDrive/GEO511/CaseStudy5")
+#yayme
 
 eyes_hurt_map_state <- read.csv("eyes_hurt_map_state.csv")
 eyes_hurt_timeline <- read.csv("eyes_hurt_timeline.csv")
