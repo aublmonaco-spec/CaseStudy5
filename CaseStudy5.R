@@ -59,7 +59,7 @@ joined_state_search <- joined_state_search %>%
          Intersect = ifelse(dist_km == 0, dist_km, NA_real_))
 
 #Used geom_sf to map the search intensity and eclipse path; Used scale_fill_distiller to change and invert the search intensity color palette; Added labels; Added arguments to move the legend to the bottom and to get rid of the graph background; Used scale_color_manual to remove the legend label for the eclipse path
-eclipse_search_map <- ggplot() + geom_sf(data = joined_state_search, aes(fill = Searches)) + geom_sf(data = upath_lo, fill = NA, aes(color = "red")) + scale_fill_distiller(palette = "Blues", direction = 1) + labs(title = "Google Trends for 'eyes hurt' Following the 2024 Solar Eclipse", subtitle = "Search intensity by state (Week of April 3-10, 2024)", x = "Longitude", y = "Latitude", colour = "Eclipse Path Outline") + theme(legend.position = "bottom", panel.background = element_blank()) + scale_color_manual(labels = NULL, values = "red")
+eclipse_search_map <- ggplot() + geom_sf(data = joined_state_search, aes(fill = Searches)) + geom_sf(data = upath_lo, fill = NA, aes(color = "red"), size = 1) + scale_fill_distiller(palette = "Blues", direction = 1) + labs(title = "Google Trends for 'eyes hurt' Following the 2024 Solar Eclipse", subtitle = "Search intensity by state (Week of April 3-10, 2024)", x = "Longitude", y = "Latitude", colour = "Eclipse Path Outline") + theme(legend.position = "bottom", panel.background = element_blank()) + scale_color_manual(labels = NULL, values = "red")
 
 #Used coord_sf to create the map projection
 eclipse_search_map + coord_sf()
@@ -68,10 +68,10 @@ eclipse_search_map + coord_sf()
 eclipse_day <- eyes_hurt_timeline %>%
   filter(Date == "4/8/2024")
 
-#Used geom_line to create a line graph for search trends over time; Added geom_vline to add a vertical line showing the trend on eclipse day; Used annotate to label the vertical line by specifying what point the label should be at; Added theme arguments to make the x-axis labels vertical since I could not figure out how to sort the data by month and have it on the graph properly, remove the graph background, change the gridline and border colors, and move the legend 
-search_over_time_plot <- ggplot() + geom_line(data = eyes_hurt_timeline, aes(x = Date, y = Searches, group = 1), color = "darkblue") + geom_vline(data = eclipse_day, aes(xintercept = Date), color = "red") + labs(title = "Google Search Trends For 'eyes hurt' In the US", subtitle = "March 1st - May 31st, 2024", x = "Date", y = "Relative Search Interest (0-100)") + annotate("text", x = "4/8/2024", y = 100, label = "Solar Eclipse (April 8, 2024)") + theme(axis.text.x = element_text(angle = 90), panel.background = element_blank(), panel.grid = element_line(color = "lightgray"), legend.position = "bottom", panel.border = element_rect(color = "black")) + coord_fixed(ratio = 0.2) 
+#Used geom_line to create a line graph for search trends over time; Added geom_vline to add a vertical line showing the trend on eclipse day (used linetype and linewidth to change the dash and size of the line); Used annotate to label the vertical line by specifying what point the label should be at; Added theme arguments to make the x-axis labels vertical since I could not figure out how to sort the data by month and have it on the graph properly, remove the graph background, change the gridline and border colors, and move the legend 
+search_over_time_plot <- ggplot() + geom_line(data = eyes_hurt_timeline, aes(x = Date, y = Searches, group = 1), linewidth = 1, color = "darkblue") + geom_vline(data = eclipse_day, aes(xintercept = Date), linewidth = 1, linetype = "dashed", color = "red") + labs(title = "Google Search Trends For 'eyes hurt' In the US", subtitle = "March 1st - May 31st, 2024", x = "Date", y = "Relative Search Interest (0-100)") + annotate("text", x = "4/8/2024", y = 100, label = "Solar Eclipse (April 8, 2024)") + theme(axis.text.x = element_text(angle = 90), panel.background = element_blank(), panel.grid = element_line(color = "lightgray"), legend.position = "bottom", panel.border = element_rect(color = "black")) + coord_fixed(ratio = 0.2)
 
-search_over_time_plot                                
+search_over_time_plot           
 
 #ggarange will show multiple graphs on the same panel
 ggarrange(eclipse_search_map, search_over_time_plot)
