@@ -12,7 +12,7 @@ library(spData)
 library(ggpubr)
 setwd("C:/Users/aublm/OneDrive/GEO511/CaseStudy5")
 
-#read.csv opens csv files
+#read.csv opens csv files; Removed extra rows in Excel sheets before coming to class, but I wouuld have used "skip = 2" in the read.csv function to skip those rows
 eyes_hurt_map_state <- read.csv("eyes_hurt_map_state.csv")
 eyes_hurt_timeline <- read.csv("eyes_hurt_timeline.csv")
 
